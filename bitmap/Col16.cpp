@@ -2,9 +2,9 @@
 
 namespace bitFortuna {
 
-	Col16::Col16(BIT* data, void (*read)(BIT*, BIT*))
+	Col16::Col16(void* data, void (*read)(BIT*, BIT*))
 	{
-		read(data, colour);
+		read((BIT*)data, colour);
 	}
 
 	/**
@@ -15,7 +15,13 @@ namespace bitFortuna {
 	 */
 	void read16Bit(BIT* data, BIT* colour)
 	{
-		memcpy(data, colour, 2);
+		for (int i = 0; i < 10; i++)
+			colour[i] = data[i];
+
+		colour[10] = 0;
+
+		for (int i = 11; i < 16; i++)
+			colour[i] = data[i - 1];
 	}
 
 	/**
@@ -35,13 +41,11 @@ namespace bitFortuna {
 		for (int i = 0; i < 5; i++)
 			colour[i] = data[i];
 
-		for (int i = 5; i < 10; i++)
+		for (int i = 5; i < 11; i++)
 			colour[i] = data[i + 3];
 
-		for (int i = 10; i < 15; i++)
-			colour[i] = data[i + 6];
-
-		colour[15] = 0;
+		for (int i = 11; i < 16; i++)
+			colour[i] = data[i + 5];
 	}
 
 	/**
@@ -58,8 +62,6 @@ namespace bitFortuna {
 	void read32BitTo16Bit(BIT* data, BIT* colour)
 	{
 		read24BitTo16Bit(data, colour);
-
-		colour[15] = data[24];
 	}
 
 }

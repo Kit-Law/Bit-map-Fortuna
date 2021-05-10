@@ -1,5 +1,14 @@
 #pragma once
 
+/* SVG Color Names mapped to 16bit RGB
+   with 5-6-5 bit allocation:
+
+	  | Red   | Green | Blue  |
+	  |-------+-------+-------|
+	  | 5 bit | 6 bit | 5 bit |
+	  |-------+-------+-------|
+*/
+
 #include <string.h>
 
 typedef bool BIT;
@@ -10,7 +19,7 @@ namespace bitFortuna {
 	{
 		BIT colour[16];
 
-		Col16(BIT* data, void (*read)(BIT*, BIT*));
+		Col16(void* data, void (*read)(BIT*, BIT*));
 	};
 
 	void read16Bit(BIT* data, BIT* colour);
