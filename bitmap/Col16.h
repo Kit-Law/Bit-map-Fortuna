@@ -9,21 +9,30 @@
 	  |-------+-------+-------|
 */
 
+extern "C"
+{
+#include "..\fatfs\ff.h"
+#include "..\lcd\lcd.h"
+#include <stdio.h>
+}
+
 #include <string.h>
 
-typedef bool BIT;
+typedef unsigned char BYTE;
 
 namespace bitFortuna {
 
 	struct Col16
 	{
-		BIT colour[16];
+		unsigned short colour;
 
-		Col16(void* data, void (*read)(BIT*, BIT*));
+		Col16(BYTE* data, void (*read)(BYTE*, unsigned short*));
 	};
 
-	void read16Bit(BIT* data, BIT* colour);
-	void read24BitTo16Bit(BIT* data, BIT* colour);
-	void read32BitTo16Bit(BIT* data, BIT* colour);
+	void read16Bit(BYTE* data, unsigned short* colour);
+	void read24BitTo16Bit(BYTE* data, unsigned short* colour);
+	void read32BitTo16Bit(BYTE* data, unsigned short* colour);
+
+	void setBit(unsigned short* x, unsigned char* y, unsigned short from, unsigned short too);
 
 }

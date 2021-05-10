@@ -2,9 +2,11 @@
 
 namespace bitFortuna {
 
-	Col16::Col16(void* data, void (*read)(BIT*, BIT*))
+	Col16::Col16(BYTE* data, void (*read)(BYTE*, unsigned short*))
 	{
-		read((BIT*)data, colour);
+		colour = 0;
+	
+		read(data, &colour);
 	}
 
 	/**
@@ -13,15 +15,10 @@ namespace bitFortuna {
 	 * @param data a pointer to the data stream.
 	 * @param colour a pointer to the 16 bit colour.
 	 */
-	void read16Bit(BIT* data, BIT* colour)
+	void read16Bit(BYTE* data, unsigned short* colour)
 	{
-		for (int i = 0; i < 10; i++)
-			colour[i] = data[i];
-
-		colour[10] = 0;
-
-		for (int i = 11; i < 16; i++)
-			colour[i] = data[i - 1];
+		memcpy(colour, data, 2);
+		*colour |= (*colour << 1) & 0x3E000;
 	}
 
 	/**
@@ -36,16 +33,16 @@ namespace bitFortuna {
 	 * @param data a pointer to the 24 bit colour.
 	 * @param colour a pointer to the 16 bit colour.
 	 */
-	void read24BitTo16Bit(BIT* data, BIT* colour)
+	void read24BitTo16Bit(BYTE* data, unsigned short* colour)
 	{
-		for (int i = 0; i < 5; i++)
-			colour[i] = data[i];
+		for (unsigned short i = 0; i < 5; i++)
+			setBit(colour, &data[0], i, i);
 
-		for (int i = 5; i < 11; i++)
-			colour[i] = data[i + 3];
+		for (unsigned short i = 5; i < 11; i++)
+			setBit(colour, &data[1], i - 5, i);
 
 		for (int i = 11; i < 16; i++)
-			colour[i] = data[i + 5];
+			setBit(colour, &data[2], i - 10, i);
 	}
 
 	/**
@@ -59,9 +56,13 @@ namespace bitFortuna {
 	 * @param data a pointer to the 32 bit colour.
 	 * @param colour a pointer to the 16 bit colour.
 	 */
-	void read32BitTo16Bit(BIT* data, BIT* colour)
+	void read32BitTo16Bit(BYTE* data, unsigned short* colour)
 	{
 		read24BitTo16Bit(data, colour);
 	}
 
+	void setBit(unsigned short* x, unsigned char* y, unsigned short from, unsigned short too)
+	{
+		*x |= ((*y >> from) & 1) << too;
+	}
 }
