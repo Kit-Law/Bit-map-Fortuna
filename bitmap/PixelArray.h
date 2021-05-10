@@ -3,8 +3,6 @@
 #include "Header.h"
 #include "Col16.h"
 
-#include <stdlib.h>
-
 extern "C"
 {
 	#include "..\fatfs\ff.h"
@@ -12,12 +10,12 @@ extern "C"
 	#include <stdio.h>
 }
 
-#define CHUNK_SIZE 10
+#include <string.h>
 
 namespace bitFortuna {
 
-	void readPixelArray(FIL* file, Header* bitmapHeader, unsigned short chunkSize, void (*out)(BIT*, unsigned short*));
-	Col16* readPixelChunk(BIT* data, unsigned short size, unsigned short bpp, void (*read)(BIT*, BIT*));
-	Col16 readPixel(BIT* data, void (*read)(BIT*, BIT*));
+	void readPixelArray(FIL* file, Header* bitmapHeader, void (*out)(unsigned short, int, int));
+	unsigned short* readPixelChunk(BYTE* data, unsigned short size, void (*read)(BYTE*, unsigned short*));
+	unsigned short readPixel(BYTE* data, void (*read)(BYTE*, unsigned short*));
 
 }
