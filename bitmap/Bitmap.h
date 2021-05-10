@@ -1,12 +1,15 @@
 #pragma once
 
 #include "Header.h"
+#include "PixelArray.h"
+#include "Output.h"
 
 extern "C"
 {
 	#include "..\fatfs\ff.h"
 	#include "..\lcd\lcd.h"
 	#include <stdio.h>
+	#include <stdlib.h>
 }
 
 #include <string.h>
@@ -16,7 +19,6 @@ namespace bitFortuna {
 	class Bitmap
 	{
 	private:
-		FATFS fatFs;
 		FIL file;
 		Header header;
 	public:
@@ -30,7 +32,5 @@ namespace bitFortuna {
 
 	void readHeader(FIL* file, Header* header);
 	void readInfoHeader(FIL* file, Header* header);
-	
-	void readPA(FIL* file, Header* header);
 }
 

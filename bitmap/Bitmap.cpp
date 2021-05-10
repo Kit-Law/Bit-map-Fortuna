@@ -4,14 +4,18 @@ namespace bitFortuna {
 
 	Bitmap::Bitmap(const char* filename)
 	{
+		FATFS fatFs;
 		f_mount(&fatFs, "", 0);
 
 		if (f_open(&file, filename, FA_READ) != FR_OK)
+		{
+			display_string("File couldn't open.");
 			return;
+		}
 
 		readHeader(&file, &header);
 
-		//readPA(&file, &header);
+		readPixelArray(&file, &header, outputPixel);
 
 		//Cleanup
 		f_close(&file);
@@ -51,7 +55,11 @@ namespace bitFortuna {
 		UINT br;
 
 		if (f_read(file, buffer, 14, &br) != FR_OK || br != 14)
+		{
+			display_string("Header couldn't be read.");
 			return;
+		}
+			
 
 		memcpy(&header->size, &buffer[2], 4);
 		memcpy(&header->paOffset, &buffer[10], 4);
@@ -78,18 +86,6 @@ namespace bitFortuna {
 		memcpy(&header->infoHeader.YpixelsPerM, &buffer[28], 4);
 		memcpy(&header->infoHeader.colsUsed,    &buffer[32], 4);
 		memcpy(&header->infoHeader.colsImport,  &buffer[36], 4);
-	}
-
-	void readPA(FIL* file, Header* header)
-	{
-		f_lseek(file, header->paOffset);
-
-		char buffer[200];
-		UINT br;
-
-		f_read(file, buffer, 200, &br);
-
-		display_string(buffer);
 	}
 
 }
