@@ -2,14 +2,16 @@
 
 #include "Header.h"
 #include "Col16.h"
+#include "Output.h"
 
 extern "C"
 {
 	#include "..\fatfs\ff.h"
 	#include "..\lcd\lcd.h"
-	#include <stdio.h>
 }
 
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 namespace bitFortuna {

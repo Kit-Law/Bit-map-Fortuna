@@ -1,5 +1,4 @@
 #include "PixelArray.h"
-#include <stdlib.h>
 
 namespace bitFortuna {
 
@@ -20,14 +19,16 @@ namespace bitFortuna {
 		}
 
 		f_lseek(file, bitmapHeader->paOffset);
+		beginOutput(bitmapHeader);
 
-		for (int y = 0; y < bitmapHeader->infoHeader.hight; y++)
-			for (int x = 0; x < bitmapHeader->infoHeader.width; x++)
+		for (int x = 0; x < bitmapHeader->infoHeader.width; x++)
+			for (int y = 0; y < bitmapHeader->infoHeader.hight; y++)
 			{
-				BYTE buffer[2];
+				BYTE buffer[3];
 				UINT br;
 
-				if (f_read(file, buffer, 2, &br) != FR_OK || br != 2)
+				if (f_read(file, buffer, (bitmapHeader->infoHeader.bpp / 8), &br) != FR_OK 
+						|| br != (bitmapHeader->infoHeader.bpp / 8))
 				{
 					display_string("ERROR: reading pa.");
 					return;

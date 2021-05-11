@@ -2,16 +2,20 @@
 
 namespace bitFortuna {
 
+	void beginOutput(Header* header)
+	{
+		write_cmd(COLUMN_ADDRESS_SET);
+		write_data16(0);
+		write_data16(header->infoHeader.width - 1);
+		write_cmd(PAGE_ADDRESS_SET);
+		write_data16(0);
+		write_data16(header->infoHeader.hight - 1);
+		write_cmd(MEMORY_WRITE);
+	}
+
 	void outputPixel(unsigned short colour, int x, int y)
 	{
-		rectangle r;
-
-		r.top = y;
-		r.bottom = y;
-		r.left = x;
-		r.right = x;
-
-		fill_rectangle(r, colour);
+		write_data16(colour);
 	}
 
 }
