@@ -13,6 +13,7 @@ namespace bitFortuna {
 			unsigned long hight;
 
 			unsigned short planes;
+			/* Bits Per Pixel */
 			unsigned short bpp;
 			unsigned long compression;
 			unsigned long imageSize;

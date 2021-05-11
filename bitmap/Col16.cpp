@@ -9,53 +9,23 @@ namespace bitFortuna {
 		read(data, &colour);
 	}
 
-	/**
-	 *  Reads a 16 bit colour form a data stream.
-	 *
-	 * @param data a pointer to the data stream.
-	 * @param colour a pointer to the 16 bit colour.
-	 */
 	void read16Bit(BYTE* data, unsigned short* colour)
 	{
 		memcpy(colour, data, 2);
 		*colour |= (*colour << 1) & 0x3E000;
 	}
 
-	/**
-	 *  Reads the raw data from a 24 bit colour
-	 * into a 16 bit colour.
-	 *
-	 * The structure of a 24 bit colour is 8 bits for
-	 * red, 8 bits for green and 8 bits for blue.
-	 * To convert this into 16 bits, you need to take
-	 * the highest value bits of each section.
-	 *
-	 * @param data a pointer to the 24 bit colour.
-	 * @param colour a pointer to the 16 bit colour.
-	 */
 	void read24BitTo16Bit(BYTE* data, unsigned short* colour)
 	{
-		for (unsigned short i = 0; i < 5; i++)
-			setBit(colour, &data[0], i, i);
+		unsigned short r = 0; r |= data[0] & 0xF8;
+		unsigned short g = 0; g |= data[1] & 0xFC;
+		unsigned short b = 0; b |= data[2] & 0xF8;
 
-		for (unsigned short i = 5; i < 11; i++)
-			setBit(colour, &data[1], i - 5, i);
-
-		for (int i = 11; i < 16; i++)
-			setBit(colour, &data[2], i - 10, i);
+		*colour |= r >> 3;
+		*colour |= g << 2;
+		*colour |= b << 6;
 	}
 
-	/**
-	 *  Reads the raw data from a 32 bit colour
-	 * into a 16 bit colour.
-	 *
-	 * The structure of a 32 bit colour is 8 bits for
-	 * red, 8 bits for green and 8 bits for blue and then
-	 * an additional 8 bits for alpha, this can be disregarded.
-	 *
-	 * @param data a pointer to the 32 bit colour.
-	 * @param colour a pointer to the 16 bit colour.
-	 */
 	void read32BitTo16Bit(BYTE* data, unsigned short* colour)
 	{
 		read24BitTo16Bit(data, colour);
