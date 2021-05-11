@@ -18,6 +18,8 @@ example.display_debug();
 ```
 
 The data it shows is:
+
+```
 -Width
 -Height
 -Planes
@@ -35,3 +37,4 @@ The data it shows is:
 -YpixelsPerM
 -Colors Used
 -Important Colors
+```
